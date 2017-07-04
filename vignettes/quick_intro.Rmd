@@ -1,0 +1,49 @@
+---
+title: "A Quick Introduction to alma"
+author: "Otho Mantegazza"
+date: "`r Sys.Date()`"
+output:
+  knitr:::html_vignette:
+    toc: yes
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Introduction to alma}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+**Alma** stands for **Alignment Markup** and is a small utility to format protein sequence aligment in HTML. 
+
+Alma has been build exclusively to be used within Rmarkdown files, so that `Biostrings` elements can be nicely printed when we render Rmarkdown into HTML.
+
+## Load example file
+
+```{r}
+aa_file <- system.file("exdata/REM_example.fasta", package = "alma")
+aa_set <- Biostrings::readAAStringSet(filepath = aa_file)
+
+```
+
+Generally we like that protein sequences are printed using colour code to identify aminoacid, Biostrings, being build to be used within R, does not perform that.
+
+```{r}
+print(aa_set)
+```
+
+```{r}
+cat("<pre><SPAN style=\"color:#33cc00\">I</SPAN></pre>")
+print("<SPAN>I</SPAN>")
+```
+
+```{r, results='asis'}
+# knitr::asis_output(cat("<pre><SPAN style=\"color:#33cc00\">I</SPAN></pre>"))
+cat("<pre><SPAN style=\"color:#33cc00\">I</SPAN></pre>")
+```
+
+
+
+```{r}
+a <- matrix(1:100, 10)
+knitr::kable(a)
+```
+
