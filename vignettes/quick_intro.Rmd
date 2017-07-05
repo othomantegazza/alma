@@ -16,7 +16,7 @@ vignette: >
 
 Alma has been build exclusively to be used within Rmarkdown files, so that `Biostrings` elements can be nicely printed when we render Rmarkdown into HTML.
 
-## Load example file
+# Load example file
 
 ```{r}
 aa_file <- system.file("exdata/REM_example.fasta", package = "alma")
@@ -30,6 +30,8 @@ Generally we like that protein sequences are printed using colour code to identi
 print(aa_set)
 ```
 
+# Temporary section - how to display HTML from code?
+
 ```{r}
 cat("<pre><SPAN style=\"color:#33cc00\">I</SPAN></pre>")
 print("<SPAN>I</SPAN>")
@@ -40,10 +42,18 @@ print("<SPAN>I</SPAN>")
 cat("<pre><SPAN style=\"color:#33cc00\">I</SPAN></pre>")
 ```
 
-
-
 ```{r}
 a <- matrix(1:100, 10)
 knitr::kable(a)
 ```
+
+# print amino acids
+
+```{r, results='asis'}
+cat(aa2html(aa_set = aa_set))
+```
+
+
+
+
 
