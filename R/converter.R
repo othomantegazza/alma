@@ -28,12 +28,39 @@ read_in_dict <- function(char) {
 }
 
 
-aa2html <- function(aa_set) {
+aa2html <- function(aa_set)
+    {
+    seq2html <- function(aa_string)
+        {
+        aa_vector <- strsplit(aa_string, split = "")[[1]]
+        aa_html <- vapply(aa_vector, read_in_dict, character(1))
+        aa_html <- paste(aa_html, collapse = "")
+        return(aa_html)
+    }
+
     aa_string <- as.character(aa_set[[1]])
-    aa_vector <- strsplit(aa_string, split = "")[[1]]
-    aa_html <- vapply(aa_vector, read_in_dict, character(1))
-    aa_html <- paste(aa_html, collapse = "")
-    aa_html <- paste("<pre>", aa_html, "</pre>", sep = "")
-    return(aa_html)
+    aa_html <- seq2html(aa_string = aa_string)
+    aa_html <- paste(names(aa_set)[[1]], aa_html, sep = " ")
+
+    counter <- rep(" ", nchar(aa_string))
+    for(i in 1:length(counter)) {
+        if(i %% 10 == 0) {
+            counter[i] <- "."
+        }
+        if(i %% 100 == 0) {
+            counter[i] <- ":"
+        }
+    }
+    counter <- paste(counter, collapse = "")
+    upstring <- paste(paste(rep(" ",
+                                nchar(names(aa_set)[[1]]) + 1),
+                            collapse = ""),
+                      counter,
+                      sep = "")
+
+
+    out_text <- paste(upstring, aa_html, sep = "<br>")
+    out_text <- paste("<pre>", out_text, "</pre>", sep = "")
+    return(out_text)
 }
 
