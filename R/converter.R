@@ -30,6 +30,10 @@ read_in_dict <- function(char) {
 
 aa2html <- function(aa_set)
     {
+    stopifnot(class(aa_set) == "AAStringSet")
+    aa_set <- as.character(aa_set)
+
+
     seq2html <- function(aa_string)
         {
         aa_vector <- strsplit(aa_string, split = "")[[1]]
@@ -37,12 +41,13 @@ aa2html <- function(aa_set)
         aa_html <- paste(aa_html, collapse = "")
         return(aa_html)
     }
+    aa_html <- vapply(aa_set,
+                      FUN = seq2html,
+                      FUN.VALUE = character(1),
+                      USE.NAMES = TRUE)
 
-    aa_string <- as.character(aa_set[[1]])
-    aa_html <- seq2html(aa_string = aa_string)
-    aa_html <- paste(names(aa_set)[[1]], aa_html, sep = " ")
-
-    counter <- rep(" ", nchar(aa_string))
+    max_seq <- max(vapply(aa_set, nchar, numeric(1)))
+    counter <- rep(" ", max_seq)
     for(i in 1:length(counter)) {
         if(i %% 10 == 0) {
             counter[i] <- "."
@@ -52,14 +57,26 @@ aa2html <- function(aa_set)
         }
     }
     counter <- paste(counter, collapse = "")
+
+    max_names <- max(vapply(names(aa_html), nchar, numeric(1)))
+    length_names <- max_names + 5
     upstring <- paste(paste(rep(" ",
-                                nchar(names(aa_set)[[1]]) + 1),
+                                length_names),
                             collapse = ""),
                       counter,
                       sep = "")
 
+    for(i in 1:length(aa_html)) {
+        name_in <- names(aa_html)[i]
+        nspaces <- length_names - nchar(name_in)
+        spaces <- paste(rep(" ", nspaces), collapse = "")
+        name_in <- paste0(name_in, spaces)
+        aa_html[i] <- paste0(name_in, aa_html[i])
+    }
 
-    out_text <- paste(upstring, aa_html, sep = "<br>")
+
+    out_seq <- paste(aa_html, collapse = "<br>")
+    out_text <- paste(upstring, out_seq, sep = "<br>")
     out_text <- paste("<pre>", out_text, "</pre>", sep = "")
     return(out_text)
 }
